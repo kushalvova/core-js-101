@@ -527,8 +527,22 @@ function distinct(arr) {
  *    "Poland" => ["Lodz"]
  *   }
  */
-function group(/* array, keySelector, valueSelector */) {
-  throw new Error('Not implemented');
+function group(array, keySelector) {
+  const result = new Map();
+  const keys = Array.from(new Set([...array.map(keySelector)]));
+  keys.map((key) => {
+    const values = [];
+    array.slice(0).map((arrayItem) => {
+      const arrayValues = Object.values(arrayItem);
+      if (arrayValues.indexOf(key) >= 0) {
+        values.push(...arrayValues.filter((item) => item !== key));
+      }
+      return null;
+    });
+    result.set(key, values);
+    return null;
+  });
+  return result;
 }
 
 
@@ -545,8 +559,8 @@ function group(/* array, keySelector, valueSelector */) {
  *   [[1, 2], [3, 4], [5, 6]], (x) => x     =>   [ 1, 2, 3, 4, 5, 6 ]
  *   ['one','two','three'], (x) => x.split('')  =>   ['o','n','e','t','w','o','t','h','r','e','e']
  */
-function selectMany(/* arr, childrenSelector */) {
-  throw new Error('Not implemented');
+function selectMany(arr, childrenSelector) {
+  return arr.map(childrenSelector).reduce((result, item) => result.concat(item), []);
 }
 
 
@@ -562,8 +576,8 @@ function selectMany(/* arr, childrenSelector */) {
  *   ['one','two','three'], [2]       => 'three'  (arr[2])
  *   [[[ 1, 2, 3]]], [ 0, 0, 1 ]      => 2        (arr[0][0][1])
  */
-function getElementByIndexes(/* arr, indexes */) {
-  throw new Error('Not implemented');
+function getElementByIndexes(arr, indexes) {
+  return indexes.reduce((result, item) => result[item], arr);
 }
 
 
@@ -585,8 +599,17 @@ function getElementByIndexes(/* arr, indexes */) {
  *   [ 1, 2, 3, 4, 5, 6, 7, 8 ]   =>  [ 5, 6, 7, 8, 1, 2, 3, 4 ]
  *
  */
-function swapHeadAndTail(/* arr */) {
-  throw new Error('Not implemented');
+function swapHeadAndTail(arr) {
+  let half;
+  let result = [];
+  if (arr.length % 2 === 0) {
+    half = arr.length / 2;
+    result = arr.slice(half).concat(arr.slice(0, half));
+  } else {
+    half = (arr.length - 1) / 2;
+    result = arr.slice(half + 1).concat(arr.slice(half, half + 1)).concat(arr.slice(0, half));
+  }
+  return result;
 }
 
 
